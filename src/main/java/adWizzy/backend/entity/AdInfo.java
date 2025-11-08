@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class AdInfo {
 
     @Id
-    private ObjectId id;
+    private String id;
     private String prompt;
     private String generatedText;
 
@@ -32,7 +32,7 @@ public class AdInfo {
 
 
 //    --getters------
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
@@ -50,7 +50,7 @@ public class AdInfo {
     }
 //    ---setters-------
 
-    public void setId(ObjectId id) {
+    public void setId(String id) {
         this.id = id;
     }
 
