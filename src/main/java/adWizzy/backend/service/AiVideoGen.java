@@ -1,6 +1,7 @@
 package adWizzy.backend.service;
 
 import adWizzy.backend.dto.AdsRequestDto;
+import adWizzy.backend.dto.AiResponseDto;
 import adWizzy.backend.entity.AiAdInfo;
 import adWizzy.backend.repository.AiAdRepository;
 import adWizzy.backend.util.AiClient;
@@ -14,12 +15,12 @@ public class AiVideoGen {
     private final AiClient aiClient;
     private final AiAdRepository aiAdRepository;
 
-    public AiVideoGen(AiClient aiClient, AiAdRepository aiAdRepository){
+    public AiVideoGen(AiClient aiClient, AiAdRepository aiAdRepository) {
         this.aiClient = aiClient;
         this.aiAdRepository = aiAdRepository;
     }
 
-    public  String generateVideo(AdsRequestDto dto){
+    public AiResponseDto generateVideo(AdsRequestDto dto) {
 
 //        Prompt banao-------
         String prompt = buildPrompt(dto);
@@ -34,12 +35,18 @@ public class AiVideoGen {
         aiAd.setPlatform(dto.getPlatform());
         aiAd.setCreateAt(LocalDateTime.now());
 
-        aiAdRepository.save(aiAd);
+        AiAdInfo savedAd = aiAdRepository.save(aiAd);
 
-        return videoUrl;
-
+       return new AiResponseDto(
+               savedAd.getId(),
+               savedAd.getGeneratedVideoUrl(),
+               savedAd.getPlatform(),
+               savedAd.getCreateAt(),
+               "Success"
+       );
     }
-    private String buildPrompt(AdsRequestDto dto){
+
+    private String buildPrompt(AdsRequestDto dto) {
         return "Create an Ad for " + dto.getProductName() +
                 " Target audience " + dto.getTargetAudience() +
                 " for platform " + dto.getPlatform() +
