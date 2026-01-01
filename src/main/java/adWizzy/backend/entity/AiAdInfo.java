@@ -16,6 +16,7 @@ public class AiAdInfo {
     private String generatedVideoUrl;
     private String modelUsed;
     private String platform;
+    private String status;
     private LocalDateTime createAt;
 
     public AiAdInfo() {
@@ -29,12 +30,14 @@ public class AiAdInfo {
     }
 
     //    -----Getters & Setters for prompt---------
-    public String getId(){
+    public String getId() {
         return id;
     }
-    public void setId(String id){
+
+    public void setId(String id) {
         this.id = id;
     }
+
     public String getPrompt() {
         return prompt;
     }
@@ -86,5 +89,12 @@ public class AiAdInfo {
         this.createAt = createAt;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 }

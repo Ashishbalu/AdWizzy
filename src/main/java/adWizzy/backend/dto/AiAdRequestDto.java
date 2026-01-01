@@ -1,6 +1,6 @@
 package adWizzy.backend.dto;
 
-public class AdsRequestDto {
+public class AiAdRequestDto {
 
     private String prompt;
     private String productName;

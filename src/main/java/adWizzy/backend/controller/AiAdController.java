@@ -1,12 +1,13 @@
 package adWizzy.backend.controller;
 
-import adWizzy.backend.dto.AdsRequestDto;
+import adWizzy.backend.dto.AiAdRequestDto;
+import adWizzy.backend.dto.AiResponseDto;
 import adWizzy.backend.service.AiVideoGen;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -15,15 +16,27 @@ public class AiAdController {
 
     private final AiVideoGen aiVideoGen;
 
-    public AiAdController(AiVideoGen aiVideoGen){
+    public AiAdController(AiVideoGen aiVideoGen) {
         this.aiVideoGen = aiVideoGen;
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<String> generateVideo(@RequestBody AdsRequestDto dto){
+    public ResponseEntity<AiResponseDto> generateVideo(@RequestBody AiAdRequestDto dto) {
+        AiResponseDto response = aiVideoGen.startVideoGeneration(dto);
+        return ResponseEntity.ok(response);
+    }
 
-        String videoUrl = aiVideoGen.generateVideo(dto);
-        return ResponseEntity.ok(videoUrl);
+    @GetMapping("/status/{jobId}")
+    public ResponseEntity<Map<String, Object>> getStatus(
+            @PathVariable("jobId") String jobId) {
+
+        return ResponseEntity.ok(aiVideoGen.getJobStatus(jobId));
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<AiResponseDto>> getAdsHistory() {
+        List<AiResponseDto> history = aiVideoGen.getVideoHistory();
+        return ResponseEntity.ok(history);
     }
 
 }
