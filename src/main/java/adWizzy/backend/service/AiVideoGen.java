@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,13 +30,11 @@ public class AiVideoGen {
 
 //        Prompt banao-------
         String prompt = buildPrompt(dto);
-//        call AI only once
-//        String videoUrl = aiClient.generateVideo(prompt);
 
-//        Entities
+        //Entities
         AiAdInfo aiAd = new AiAdInfo();
         aiAd.setPrompt(prompt);
-//        aiAd.setGeneratedVideoUrl(videoUrl);
+      // aiAd.setGeneratedVideoUrl(videoUrl);
         aiAd.setPlatform(dto.getPlatform());
         aiAd.setStatus("Pending");
         aiAd.setCreateAt(LocalDateTime.now());
@@ -52,7 +51,7 @@ public class AiVideoGen {
                     null,
                     savedAd.getPlatform(),
                     savedAd.getCreateAt(),
-                    "Success"
+                    "Pending"
             );
         } catch (Exception e) {
             throw new AiGenerationException("Failed to save video date");
@@ -81,12 +80,14 @@ public class AiVideoGen {
         AiAdInfo ad = aiAdRepository.findById(jobID)
                 .orElseThrow(()-> new RuntimeException("Job not found"));
 
-        return Map.of(
-                "JobId", ad.getId(),
-                "Status", ad.getStatus(),
-                "VideoUrl", ad.getGeneratedVideoUrl()
-        );
+        Map<String, Object> response = new HashMap<>();
 
+        response.put("jobId", ad.getId());
+        response.put("status", ad.getStatus());
+        response.put("videoUrl", ad.getGeneratedVideoUrl()); // null allowed
+        response.put("createdAt", ad.getCreateAt());
+
+        return response;
     }
 
 
