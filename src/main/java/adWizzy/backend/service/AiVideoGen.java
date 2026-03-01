@@ -3,6 +3,7 @@ package adWizzy.backend.service;
 import adWizzy.backend.dto.AiAdRequestDto;
 import adWizzy.backend.dto.AiResponseDto;
 import adWizzy.backend.entity.AiAdInfo;
+import adWizzy.backend.enums.JobStatus;
 import adWizzy.backend.exception.AiGenerationException;
 import adWizzy.backend.repository.AiAdRepository;
 import adWizzy.backend.util.AiClient;
@@ -36,7 +37,7 @@ public class AiVideoGen {
         aiAd.setPrompt(prompt);
       // aiAd.setGeneratedVideoUrl(videoUrl);
         aiAd.setPlatform(dto.getPlatform());
-        aiAd.setStatus("Pending");
+        aiAd.setStatus(JobStatus.PENDING);
         aiAd.setCreateAt(LocalDateTime.now());
 
         AiAdInfo savedAd = aiAdRepository.save(aiAd);
@@ -51,7 +52,7 @@ public class AiVideoGen {
                     null,
                     savedAd.getPlatform(),
                     savedAd.getCreateAt(),
-                    "Pending"
+                    JobStatus.PENDING.name()
             );
         } catch (Exception e) {
             throw new AiGenerationException("Failed to save video date");
@@ -69,9 +70,10 @@ public class AiVideoGen {
                 throw new AiGenerationException("Ai video generation is failed");
             }
             aiAd.setGeneratedVideoUrl(videoUrl);
-            aiAd.setStatus("complete");
+            aiAd.setStatus(JobStatus.COMPLETED);
         } catch (Exception e) {
-            aiAd.setStatus("Failed");
+            e.printStackTrace();
+            aiAd.setStatus(JobStatus.FAILED);
         }
         aiAdRepository.save(aiAd);
     }

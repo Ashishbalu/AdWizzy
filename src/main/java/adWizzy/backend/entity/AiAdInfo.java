@@ -1,9 +1,11 @@
 package adWizzy.backend.entity;
 
+import adWizzy.backend.enums.JobStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import adWizzy.backend.enums.JobStatus;
 
 @Document(collection = "Ai_Ads")
 public class AiAdInfo {
@@ -16,7 +18,8 @@ public class AiAdInfo {
     private String generatedVideoUrl;
     private String modelUsed;
     private String platform;
-    private String status;
+
+    private JobStatus status;
     private LocalDateTime createAt;
 
     public AiAdInfo() {
@@ -89,11 +92,11 @@ public class AiAdInfo {
         this.createAt = createAt;
     }
 
-    public String getStatus() {
+    public JobStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(JobStatus status) {
         this.status = status;
     }
 
