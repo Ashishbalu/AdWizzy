@@ -3,6 +3,7 @@ package adWizzy.backend.controller;
 import adWizzy.backend.dto.AiAdRequestDto;
 import adWizzy.backend.dto.AiResponseDto;
 import adWizzy.backend.service.AiVideoGen;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class AiAdController {
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<AiResponseDto> generateVideo(@RequestBody AiAdRequestDto dto) {
+    public ResponseEntity<AiResponseDto> generateVideo(@Valid @RequestBody AiAdRequestDto dto) {
         AiResponseDto response = aiVideoGen.startVideoGeneration(dto);
         return ResponseEntity.ok(response);
     }

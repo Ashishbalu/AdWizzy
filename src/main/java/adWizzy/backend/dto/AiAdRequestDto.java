@@ -1,10 +1,18 @@
 package adWizzy.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class AiAdRequestDto {
 
     private String prompt;
+
+    @NotBlank(message = "Product name is required")
     private String productName;
+
+    @NotBlank(message = "Target audience section should not be empty")
     private String targetAudience;
+
+    @NotBlank(message = "Platform is required")
     private String platform;
 
     public String getPrompt() {
